@@ -4,7 +4,6 @@
 </div>
 <div>
     <label>Author</label>
-    <% authors %>
     <select name="author">
         <% authors.forEach(author => { %>
             <% if (author.id === book.author) { %>
@@ -34,7 +33,7 @@
 <div>
     <label>Published Date</label>
     <input type="Date" name="publishedDate" 
-        value="<%=book.publishedDate == null ? ' ' : book.publishedDate.toISOString().split('T')[0] %>">
+        value="<%=book.publishedDate == null ? '' : book.publishedDate.toISOString().split('T')[0] %>">
 </div>
 <div>
     <label>Read</label>

@@ -5,49 +5,39 @@ const bookSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  author: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "Author"
-  },
-  genre: {
-    type: String,
-    required: true
-  },
-  coverImage: {
-    type: Buffer,
-  },
-  coverImageType: {
-    type: String
-  },
   description: {
     type: String
   },
-  pageCount: {
-    type: Number,
+  publishedDate: {
+    type: Date,
     required: true
   },
-  publishDate: {
-    type: Date,
-    required: true,
-    default: Date.now()
-  },
-  read: {
-    type: String,
-    required: true,
-    default: "false"
+  pageCount: {
+    type: Number,
+    required: true    
   },
   createdAt: {
     type: Date,
     required: true,
-    default: Date.now
+    default: Date.now    
   },
-});
-
-bookSchema.virtual('coverImagePath').get(function () {
-  if (this.coverImage != null && this.coverImageType != null) {
-    return `data:${this.coverImageType}; charset=utf-8;base64, ${this.coverImage.toString(base64)}`
+  coverImage: {
+    type: String
+  },
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'Author'    
+  },
+  genre: {
+      type: String,
+      required: true
+  },
+  read: {
+      type: Boolean,
+      required: true,
+      default: false
   }
-})
+});
 
 module.exports = mongoose.model("Book", bookSchema);
