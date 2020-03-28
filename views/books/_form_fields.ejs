@@ -23,10 +23,6 @@
     <textarea name="description"><%=book.description%></textarea>
 </div>
 <div>
-    <label>Cover</label>
-    <input class="filepond" type="file" name="cover">
-</div>
-<div>
     <label>Page Count</label>
     <input type="number" name="pageCount" min="1" value="<%=book.pageCount%>">
 </div>
@@ -38,4 +34,8 @@
 <div>
     <label>Read</label>
     <input  type="checkbox" name="read" value="<%=book.read%>">
+</div>
+<div>
+    <label>Cover</label>
+    <input class="filepond" type="file" name="cover">
 </div>

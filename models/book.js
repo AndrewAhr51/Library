@@ -21,8 +21,8 @@ const bookSchema = new mongoose.Schema({
     required: true,
     default: Date.now    
   },
-  coverImage: {
-    type: String
+  coverImageName: {
+    type: Buffer
   },
   author: {
     type: mongoose.Schema.Types.ObjectId,
@@ -38,6 +38,13 @@ const bookSchema = new mongoose.Schema({
       required: true,
       default: false
   }
-});
+})
 
+/* bookSchema.virtual('coverImagePath').get(function(){
+  if(this.coverImage !=null && this.coverImageType !=null) {
+    return `data: ${this.coverImageType};charset=utf-8; base64,
+      ${this.coverImageType.toString(base64)}`
+  }
+})
+ */
 module.exports = mongoose.model("Book", bookSchema);

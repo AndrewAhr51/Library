@@ -14,8 +14,10 @@
     "ejs": "^3.0.1",
     "express": "^4.17.1",
     "express-ejs-layouts": "^2.5.0",
+    "method-override": "^3.0.0",
     "mongodb": "^3.5.5",
     "mongoose": "^5.9.5",
+    "override": "0.0.1",
     "regexp": "^1.0.0"
   },
   "devDependencies": {
