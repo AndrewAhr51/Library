@@ -4,11 +4,10 @@ const router = express.Router();
 const Author = require("../models/author");
 const Book = require("../models/book");
 
-
 // New authors screen
-router.get("/new", async(req, res) => {
+router.get("/new", async (req, res) => {
   res.render("authors/new", { author: new Author() });
-}); 
+});
 
 // Create author route
 router.post("/", async (req, res) => {
@@ -17,116 +16,103 @@ router.post("/", async (req, res) => {
   });
 
   try {
-    const newAuthor = await author.save()
-    res.redirect(`authors/show/${newAuthor.id}`);
-    //res.redirect("authors");
-  } catch(err) {
-    console.log(err)
+    const newAuthor = await author.save();
+    res.redirect(`authors/${newAuthor.id}`);
+  } catch {
     res.render("authors/new", {
-        author: author,
-        errorMessage: "Error creating Author..."
+      author: author,
+      errorMessage: "Error creating Author..."
     });
   }
 });
 
 // All authors route
 router.get("/", async (req, res) => {
-
-  let query = Author.find()
-  if (req.query.name !=null && req.query.name != '' ){
-    query= query.regex('name', new RegExp(req.query.name, 'i'))
-  } 
-
-  try{
-      const authors = await query.exec()
-      res.render("authors/index",{ authors: authors,
-          searchOptions:req.query});
-  }catch (err) {
-      res.redirect('/')
+  let query = Author.find();
+  if (req.query.name != null && req.query.name != "") {
+    query = query.regex("name", new RegExp(req.query.name, "i"));
   }
-  
+
+  try {
+    const authors = await query.exec();
+    res.render("authors/index", { authors: authors, searchOptions: req.query });
+  } catch {
+    res.redirect("/");
+  }
 });
 
 // Show Author by ID
-router.get('/:id', async (req, res) => {
-  try{
-    const author = await Author.findById(req.params.id)
-    const books = await Book.find({author: author.id}).limit(6).exec()
-    res.redirect('/views/authors/show.ejs/', {
-      author: author,
-      booksbyAuthor: books
-    })
-  } catch {
-   
-      res.redirect('/')
-  }
-  });
- 
-  // Edit Author 
-router.get("/:id/edit", async (req, res) => {
-  try {
-    const author = await Author.findById(req.params.id)
-    res.render("authors/edit", {author: author})
-  } catch {
-
-    res.rediredt('/authors/')
-  }
+router.get("/:id/", async (req, res) => {
   
+   try {
+    const author = await Author.findById(req.params.id);
+    const books = await Book.find({ author: author.id }).limit(6).exec();
+    
+    res.render("authors/show", {
+      author: author,
+      booksByAuthor: books
+    });
+  } catch {
+    res.render("authors/", { authors: authors, searchOptions: req.query });
+  }
 });
 
-// Get Author for update
+// Edit Author
+router.get("/:id/edit", async (req, res) => {
+  try {
+    const author = await Author.findById(req.params.id);
+    res.render("authors/edit", { author: author });
+  } catch {
+    res.redirect("/authors");
+  }
+});
+
+// Author update
 router.put("/:id", async (req, res) => {
-  let author
+  let author;
 
   try {
-    author = await Author.findById(req.params.id)
-    author.name = req.body.name
-    await author.save()
-   
+    author = await Author.findById(req.params.id);
+    author.name = req.body.name;
+    await author.save();
+
     res.redirect(`/authors/${author.id}`);
-  } catch (err) {
-    console.log(err)
+  } catch {
     if (author == null) {
-      res.redirect('/');
+      res.redirect("/");
     } else {
-    res.render("/authors/edit", {
+      res.render("/authors/edit", {
         author: author,
         errorMessage: "Error updating Author..."
-    });
-   } 
+      });
+    }
   }
 });
 
 //Delete Author...
-router.delete('/:id', async (req, res) => {
-  
-  let author = new Author ({
-    name :req.body.name
-  })
+router.delete("/:id", async (req, res) => {
+  let author = new Author({
+    name: req.body.name
+  });
 
-  author = req.params.id
-  try {      
-
-    let book = await Book.findOne({author});
+  author = req.params.id;
+  try {
+    let book = await Book.findOne({ author });
 
     if (book == null) {
-       await Author.findByIdAndRemove(req.params.id);
-       res.redirect("/authors");
+      await Author.findByIdAndRemove(req.params.id,{useFindAndModify:false});
+      res.redirect("/authors");
     } else {
-      res.render(`/authors/${req.params.id}`, {
-        author: author,
-        errorMessage: "Error updating Author..."
-      })
+      res.redirect(405, "/authors", { author:author,
+        errorMessage: `Not allowed, ${author.name}, still has books in inventory ` });
     }
-    
-  } catch (err) {
-    console.log(err)
+  } catch {
     if (author == null) {
-       res.redirect('/');
+      res.redirect("/");
     } else {
-      res.render(`/authors/${author.id}`)
+      res.render(`/,${author.id}`);
     }
   }
-})
+});
 
 module.exports = router;
