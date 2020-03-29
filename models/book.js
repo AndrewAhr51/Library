@@ -21,7 +21,7 @@ const bookSchema = new mongoose.Schema({
     required: true,
     default: Date.now    
   },
-  coverImageName: {
+  coverImagePath: {
     type: Buffer
   },
   author: {
@@ -35,7 +35,6 @@ const bookSchema = new mongoose.Schema({
   },
   read: {
       type: Boolean,
-      required: true,
       default: false
   }
 })

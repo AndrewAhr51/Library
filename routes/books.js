@@ -4,6 +4,34 @@ const Book = require("../models/book");
 const Author = require("../models/author");
 const imageMimeTpes = ["image/jpeg", "image.png", "image.gif"];
 
+// New Book
+router.get("/new", async (req, res) => {
+  renderNewPage(res, req, false);
+});
+
+// Create book
+router.post("/", async (req, res) => {
+  const book = new Book({
+    title: req.body.title,
+    description: req.body.description,
+    read: req.body.read,
+    genre: req.body.genre,
+    pageCount: req.body.pageCount,
+    author: req.body.author,
+    coverImagePath: null,
+    publishedDate: new Date(req.body.publishedDate)
+  });
+
+  saveCover(book, req.body.cover);
+
+  try {
+    const newBook = await book.save();
+    res.redirect(`books/${newBook.id}`);
+  } catch (err) {
+    renderNewPage(res, book, true);
+  }
+});
+
 // All books route
 router.get("/", async (req, res) => {
   let query = Book.find();
@@ -19,71 +47,93 @@ router.get("/", async (req, res) => {
   }
 });
 
-// New Book
-router.get("/new", async (req, res) => {
-  renderNewPage(res, req, false);
-});
-
-// Create book
-router.post("/", async (req, res) => {
-  const book = new Book({
-    title: req.body.title,
-    description: req.body.description,
-    read: req.body.read,
-    genre: req.body.genre,
-    pageCount: req.body.pageCount,
-    author: req.body.author,
-    coverImageName: null,
-    publishedDate: new Date(req.body.publishedDate)
-  });
-
-  // saveCover(book, req.body.cover)
-
-  try {
-    const newBook = await book.save();
-    //res.redirect(`books/${newBook.id}`)
-    res.redirect("/books");
-  } catch (err) {
-    renderNewPage(res, book, true);
-  }
-});
-
-// Edit book
-router.get("/:id/edit", async (req, res) => {
-  try {
-    const books = await Book.findById(req.params.id);
-    res.send(books);
-    res.render(`books/edit/${req.params.id}`, { books: books });
-  } catch {
-    res.redirect("/books");
-  }
-});
-
-router.get("/:id", async (req, res) => {
+//Show book route
+router.get("/:id/", async (req, res) => {
   try {
     const book = await Book.findById(req.params.id)
       .populate("author")
       .exec();
     const author = await Author.find(book.author);
-    console.log(book);
-    res.render(`books/${author._id}/show`, { book: book, author: author });
+
+    res.render("books/show", { book: book });
   } catch {
     res.redirect("/");
   }
 });
 
+// Edit book route
+router.get("/:id/edit", async (req, res) => {
+  try {
+    const book = await Book.findById(req.params.id)
+    .populate("author")
+    .exec();
+
+    renderEditPage(res, book);
+  } catch {
+    res.redirect("/");
+  }
+});
+
+// Update  book route
+router.put("/:id", async (req, res) => {
+
+  let book;
+  let author
+
+  try {
+    const book = await Book.findById(req.params.id)
+    .populate("author")
+    .exec();
+    
+    console.log(book);
+
+    book.title = req.body.title;
+    book.author = req.body.author
+    book.publishedDate = new Date(req.body.publishedDate);
+    book.pageCount = req.body.pageCount;
+    book.description = req.body.description;
+    book.genre = req.body.genre;
+    book.read = req.body.read;
+
+   /*  if (req.body.coverImagePath != null && req.body.coverImagePath !== '') {
+      saveCover(book, req.body.cover);
+    } */
+
+    await book.save();
+    res.redirect(`/books/${book.id}`);
+  } catch {
+    if (book !== null) {
+      renderEditPage(res, book, "edit", true);
+    }
+    redirect("/");
+  }
+});
 async function renderNewPage(res, book, hasError = false) {
+  renderFormPage(res, book, "new", hasError);
+}
+
+async function renderEditPage(res, book, hasError = false) {
+  renderFormPage(res, book, "edit", hasError);
+}
+
+async function renderFormPage(res, book, form, hasError = false) {
   try {
     const authors = await Author.find({});
     const params = {
       authors: authors,
       book: book
     };
-    if (hasError) params.errorMessage = "Error creating book";
-
-    res.render("books/new", params);
+    if (hasError){
+      if (form == 'edit') {
+        params.errorMessage = "Error Updating  the book";
+      } else{
+        params.errorMessage = "Error Creating  the book";
+      }
+    }
+    
+    res.render(`books/${form}`, params);
   } catch {
-    res.render("books");
+    res.render("/books");
   }
 }
 
