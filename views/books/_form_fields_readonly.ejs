@@ -1,0 +1,39 @@
+<div>
+    <label>Title:</label>
+    <input type="text" name="title" value="<%=book.title%>"  readonly>
+</div>
+<div>
+    <label>Author:</label>
+    <% author.forEach(a => { %>
+        <% if (a.id === book.author) { %>
+            <input type="text" name="genre" readonly value="<%=a.name %>" readonly>
+        <% } else { %>
+            <input type="text" name="genre" readonly value="<%=a.name %>" readonly>       
+        <% } %>
+    <% }) %>
+</div>
+<div>
+    <label>Genre:</label>
+    <input type="text" name="genre" readonly value="<%=book.genre %>" readonly>
+</div>
+<div>
+    <label>Description:</label>
+    <textarea name="description" readonly><%= book.description %></textarea>
+</div>
+<div>
+    <label>Page Count:</label>
+    <input type="number" name="pageCount" min="1" value="<%= book.pageCount %>" enabled="false">
+</div>
+<div>
+    <label>Published Date:</label>
+    <input type="Date" name="publishedDate" 
+        value="<%=book.publishedDate == null ? '' : book.publishedDate.toISOString().split('T')[0] %>" readonly>
+</div>
+<div>
+    <label>Read:</label>
+    <input  type="text" name="read" value="<%= book.read %>">
+</div>
+<div>
+    <label>Cover:</label>
+    <input class="filepond" type="file" name="cover" readonly/>
+</div>
