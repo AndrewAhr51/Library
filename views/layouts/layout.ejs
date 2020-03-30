@@ -10,11 +10,126 @@
     <script defer src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js" type="text/javascipts"></script>
     <script defer src="https://unpkg.com/filepond/dist/filepond.js"></script>
     <script defer src="javascipts/fileUpload.js" type="text/javascipts"></script>
-    <title>Library</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <style>
+        *,*::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+          font-family: 'Roboto', serif;
+          color: hsl(200, 100%, 87%);
+          font-size: 20px;
+          background: linear-gradient(to right, hsl(200,100%,8%), hsl(200,100%, 16%))
+        }
+        a {
+            color: hsl(200, 100%, 87%) ;
+        }
+        .container{
+            max-width: 1200px;
+            margin: auto;
+            margin-bottom: 3rem;
+        }
+        .inner-container{
+            margin: 0 2rem;
+        }
+        .header-nav li a:hover,.header-title-title:hover {
+            color: white;
+        }
+        .page-header {
+             font-size: 1rem;
+            font-weight: 500;
+        }
+        .btn {
+            border: 1px solid;
+            border-radius: .5rem;
+            padding: .5rem 1rem;
+            font-size: 1.2rem;
+            font-family: 'Roboto', serif;
+            cursor: pointer;
+            text-decoration: none;
+            text-align:center;
+}
+        .btn-primary {
+            color: hsl(200, 100%, 20%);
+            background-color: hsl(200, 100%, 83%);
+            border: black;
+
+        }
+        .btn-primary:hover {
+            color: hsl(200, 100%, 10%);
+            background-color: hsl(200, 100%, 73%);
+            border: black;
+
+        }
+        .btn-danger {
+            color: hsl(200, 100%, 20%);
+            background-color: hsl(345, 100%, 83%);
+            border: black;
+            color: black;
+        }
+        .btn-danger:hover {
+            color: hsl(200, 100%, 10%);
+            background-color: hsl(345, 100%, 73%);
+            border: black;
+            color: black;
+        }
+        .btn-row  {
+            display:flex;
+            align-items:  flex-start;
+        }
+        .btn-row  > *{
+            margin-left: 1rem;
+        }
+        .btn-row > *:first-child {
+            margin-left: 0;
+        }
+        .header-title {
+            color: hsl(200, 100%, 87%) ;
+            text-decoration: none;
+            font-size: 3rem;
+            font-weight: bold;
+        }
+        .header-nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            text-decoration: none;
+        }
+        .header-link {
+            color: hsl(200, 100%, 87%) ;
+            font-size: .5 rem;
+            font-weight: bold;
+            margin-bottom: 5rem;
+            text-decoration: none;
+        }
+        .header-nav ul {
+            display: flex;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+            text-decoration: none;
+        }
+        .header-nav li{
+            list-style:none;
+        }
+        .header-nav li a {
+            text-decoration: none;
+            color: hsl(200, 100%, 87%) ;
+            font-weight: 200;
+            padding: 1rem;        
+        }
+</style>        
+<title>Book Library</title>
 </head>
 <body>
-    <%- include('../partials/_header.ejs') %>
-    <%- include('../partials/errorMessage.ejs') %>
-    <%- body %>
+    <div class="container"></div>
+        <%- include('../partials/_header.ejs') %>
+        <div class="inner-container btn-row">
+            <%- include('../partials/errorMessage.ejs') %>
+        </div>
+        <%- body %>
+    </div>
 </body>
 </html>
