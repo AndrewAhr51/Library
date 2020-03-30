@@ -4,16 +4,24 @@
 </div>
 <div>
     <label>Author</label>
+    <% if(book.author != null && book.author !=='') {%>
     <select name="author">
         <% authors.forEach(author => { %>
-            <% if (author.id === book.author.id) { %>
+           <% if (author.id === book.author.id) { %>
                 <option selected label="<%= author.name%>" value="<%= author.id%>"></option>
-            <% } else { %>
+           <% } else { %>
                 <option  label="<%= author.name%>" value="<%= author.id%>"></option>        
-            <% } %>
+           <% } %>
         <% }) %>
     </select>
-</div>
+    <% } else { %>
+    <select name="author">
+        <% authors.forEach(author => { %>
+             <option  label="<%= author.name%>" value="<%= author.id%>"></option>        
+        <% }) %>
+    <% } %>    
+    </select>
+ </div>
 <div>
     <label>Genre</label>
     <input type="text" name="genre" value="<%=book.genre%>">

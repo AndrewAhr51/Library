@@ -6,7 +6,8 @@ const imageMimeTpes = ["image/jpeg", "image.png", "image.gif"];
 
 // New Book
 router.get("/new", async (req, res) => {
-  renderNewPage(res, req, false);
+  const book = new Book();
+  renderNewPage(res, req, book, false);
 });
 
 // Create book
@@ -108,8 +109,30 @@ router.put("/:id", async (req, res) => {
     redirect("/");
   }
 });
-async function renderNewPage(res, book, hasError = false) {
-  renderFormPage(res, book, "new", hasError);
+
+router.delete('/:id', async (req, res) => {
+  let book;
+  try {
+    book = await Book.findById(req.params.id)
+    book.remove()
+    res.redirect('/books')
+  } catch{
+    if( book !== null) {
+     book = await Book.findById(req.params.id)
+    .populate("author")
+    .exec();
+      res.render('books/show'),{
+        book: book,
+        errorMessage:'Could not remove book'
+      }
+    } else {
+      res.redirect('/');
+    }
+  }
+})
+
+async function renderNewPage(res, book, author, hasError = false) {
+    renderFormPage(res, book, "new", hasError);
 }
 
 async function renderEditPage(res, book, hasError = false) {
@@ -138,12 +161,12 @@ async function renderFormPage(res, book, form, hasError = false) {
 }
 
 function saveCover(book, coverEncoded) {
-  if (coverEncoded == null) return;
+  /* if (coverEncoded == null) return;
   const cover = JSON.parse(coverEncoded);
   if (cover != null && imageMimeTypes.includes(cover.type)) {
     book.coverImage = new Buffer.from(cover.data, "base64");
     book.coverImageType = cover.type;
-  }
+  } */
 }
 
 module.exports = router;
