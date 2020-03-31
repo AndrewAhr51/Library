@@ -37,19 +37,19 @@ router.post("/", async (req, res) => {
 router.get("/", async (req, res) => {
   let query = Book.find();
   if (req.query.name != null && req.query.name != "") {
-    query = query.regex("name", new RegExp(req.query.name, "i"));
+    query = query.regex("title", new RegExp(req.query.title, "i"));
   }
 
   try {
     const books = await query.exec();
     res.render("books/index", { books: books, searchOptions: req.query });
-  } catch (err) {
-    res.redirect("/books");
+  } catch {
+    res.redirect("/");
   }
 });
 
 //Show book route
-router.get("/:id/", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const book = await Book.findById(req.params.id)
       .populate("author")
