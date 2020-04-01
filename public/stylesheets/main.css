@@ -1,6 +1,47 @@
-@import 'shared/font.css';
+@import 'shared/variables.css';
+@import 'shared/fonts.css';
+@import 'shared/header.css';
+@import 'shared/buttons.css';
+@import 'shared/form.css';
 
-.root {
-font-family: 'OpenSans';
-font-size: 20px
+:root {
+    font-family: 'Calibri';
+    font-size: 20px;
+    color: var(--color-text-light);
+}
+
+*, *::before, *::after {
+    box-sizing:border-box;
+}
+
+body {
+    background: linear-gradient(to right, var(--color-background-dark), var(--color-background-light));
+}
+
+.container{
+    max-width: width 1200px;
+    margin:auto;
+    margin-bottom: 3rem;
+}
+.inner-container {
+    margin:0 2rem;
+}
+
+.page-header {
+    font-family: 'Calibri';
+    font-size: 2.5rem;
+    font-weight: 500;
+    color: var(--color-text-light);
+}
+.filepond--root {
+    font-family: 'Calibri';
+    margin-bottom: 0
+}
+.filepond--panel-root {
+    background-color: hsl(200,100%, 31% );
+    border: 1px solid  hsl(200,100%, 31% );
+}
+.filepond--drop-label {
+    color:  white;
+    font-size: inheret;
 }

@@ -54,8 +54,8 @@ router.get("/:id", async (req, res) => {
     const book = await Book.findById(req.params.id)
       .populate("author")
       .exec();
-    const author = await Author.find(book.author);
 
+      console.log(book);
     res.render("books/show", { book: book });
   } catch {
     res.redirect("/");

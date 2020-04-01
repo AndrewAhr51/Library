@@ -1,25 +1,4 @@
-<style>
-.author-row {
-  display:flex;
-  justify-content: space-between
-  margin-bottom 1rem;
-}
-.author-name{
-  font-size:1.5rem
-}
-.btn-row  {
-    display:flex;
-    align-items:flex-start  flex-start;
-}
-.btn-row  > *{
-    margin-left: 1rem;
-}
-.btn-row > *:first-child {
-    margin-left: 0;
-}
-
-</style>
-<h2>Search Authors</h2>
+<h2 class="page-header">Search Authors</h2>
 <form action="/authors" method="GET">
   <div class="form-item">
     <div form-row form-row-end btn-row></div>
@@ -38,7 +17,7 @@
 <% authors.forEach(author => { %>
   <div class="author-row"></div>
       <div class="author-name"><%= author.name %></div>
-      <div class="form-row form-row-end btn-row">
+      <div class="btn-row">
         <a class="btn btn-primary" href="/authors/<%= author.id %>/">View</a>
         <a class="btn btn-primary" href="/authors/<%= author.id %>/edit">Edit</a>
         <%- include('../partials/deleteForm', { url:`authors/${author.id}`})%> 
