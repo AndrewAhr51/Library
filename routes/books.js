@@ -36,7 +36,7 @@ router.post("/", async (req, res) => {
 // All books route
 router.get("/", async (req, res) => {
   let query = Book.find();
-  if (req.query.name != null && req.query.name != "") {
+  if (req.query.title != null && req.query.title != "") {
     query = query.regex("title", new RegExp(req.query.title, "i"));
   }
 
@@ -54,8 +54,8 @@ router.get("/:id", async (req, res) => {
     const book = await Book.findById(req.params.id)
       .populate("author")
       .exec();
-    const author = await Author.find(book.author);
 
+      console.log(book);
     res.render("books/show", { book: book });
   } catch {
     res.redirect("/");
